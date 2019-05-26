@@ -22,7 +22,7 @@ HTML = """<!DOCTYPE html>
 
                 <div class="album py-5 bg-light">
                         <div class="container">
-                    
+
                           <div class="row">
                             $items
                           </div>
@@ -57,7 +57,7 @@ EXPA_TEMPLATE = """              <div class="col-md-4">
 
 GAME_TEMPLATE = Template(GAME_TEMPLATE)
 EXPA_TEMPLATE = Template(EXPA_TEMPLATE)
-df = pd.read_csv("./lockergames.csv", dtype=str)
+df = pd.read_csv("./storagegames.csv", dtype=str)
 
 content = ""
 for i, row in df.iterrows():
@@ -67,5 +67,5 @@ for i, row in df.iterrows():
         item = GAME_TEMPLATE.substitute(imagelink=row.IMAGE, name=row.TITLE, description=str(row.DESCRIPTION)[:600] + "...", bgglink=row.BGG_URL)
     content = content + str(item) + "\n"
 
-with open("./lockergames.html", "w") as f:
+with open("./storagegames.html", "w") as f:
         f.write(Template(HTML).substitute(items=content))
