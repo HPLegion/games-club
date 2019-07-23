@@ -14,7 +14,7 @@ df = pd.read_csv("games_input.csv", dtype=str)
 df["BGG_ID"] = df["BGG_URL"].apply(get_id)
 
 
-bgg = BGGClient(requests_per_minute=720)
+bgg = BGGClient(requests_per_minute=30)
 newdf = pd.DataFrame(columns=df.columns)
 for i, row in tqdm(df.iterrows(), total=df.shape[0], ascii=True):
     # print(row.TITLE)
@@ -25,7 +25,7 @@ for i, row in tqdm(df.iterrows(), total=df.shape[0], ascii=True):
         game = bgg.game(game_id=row.BGG_ID)
     except:
         game = None
-    
+
     if game:
 
         newdf.loc[i, "TITLE"] = game.name
