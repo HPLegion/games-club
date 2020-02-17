@@ -1,7 +1,7 @@
 import pandas as pd
 from string import Template
 
-HTML = """<!DOCTYPE html>
+HTML_COLD = """<!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8">
@@ -16,6 +16,37 @@ HTML = """<!DOCTYPE html>
                         <p class="lead text-muted">
                             These are the games that are currently in "cold storage".
                             Please go through the list and check if there is anything that you are very interested in playing in the near future, and report those games to us.
+                        </p>
+                    </div>
+                </section>
+
+                <div class="album py-5 bg-light">
+                        <div class="container">
+
+                          <div class="row">
+                            $items
+                          </div>
+                        </div>
+                      </div>
+        </div>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    </body>
+</html>
+"""
+HTML_MAIN = """<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>List of Games</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div class="container">
+                <section class="jumbotron text-center">
+                    <div class="container">
+                        <h1 class="jumbotron-heading">List of Games</h1>
+                        <p class="lead text-muted">
+                            These are the games that are currently stored in the R1 locker or the main locker in R2.
                         </p>
                     </div>
                 </section>
@@ -68,4 +99,19 @@ for i, row in df.iterrows():
     content = content + str(item) + "\n"
 
 with open("./storagegames.html", "w") as f:
-        f.write(Template(HTML).substitute(items=content))
+        f.write(Template(HTML_COLD).substitute(items=content))
+
+
+
+df = pd.read_csv("./lockergames.csv", dtype=str)
+
+content = ""
+for i, row in df.iterrows():
+    if row.TYPE == "Expansion":
+        item = EXPA_TEMPLATE.substitute(imagelink=row.IMAGE, name=row.TITLE, description=str(row.DESCRIPTION)[:600] + "...", bgglink=row.BGG_URL, basegame=row.BASEGAME)
+    else:
+        item = GAME_TEMPLATE.substitute(imagelink=row.IMAGE, name=row.TITLE, description=str(row.DESCRIPTION)[:600] + "...", bgglink=row.BGG_URL)
+    content = content + str(item) + "\n"
+
+with open("./lockergames.html", "w") as f:
+        f.write(Template(HTML_MAIN).substitute(items=content))

@@ -43,8 +43,8 @@ for i, row in tqdm(df.iterrows(), total=df.shape[0], ascii=True):
 
 newdf = newdf.sort_values("TITLE")
 
-lockerdf = newdf[newdf["LOCATION"] == "Main Games Locker R2"]
-storagedf = newdf[newdf["LOCATION"] != "Main Games Locker R2"]
+lockerdf = newdf[(newdf["LOCATION"] == "Main Games Locker R2") | (newdf["LOCATION"] == "R1")]
+storagedf = newdf[(newdf["LOCATION"] != "Main Games Locker R2") & (newdf["LOCATION"] != "R1")]
 
 lockerdf.to_csv("lockergames.csv", index=False)
 storagedf.to_csv("storagegames.csv", index=False)
